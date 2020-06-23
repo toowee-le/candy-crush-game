@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -10,16 +12,91 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-  }
+}
+
+h2,
+#score {
+    font-size: 2.3rem;
+    color: #4d5b3c;
+    text-shadow: 2px 2px 0 rgba(0,0,0,.4);
+    /*border: 1px solid red;*/
+}
+
+h2 {
+    margin: 10px auto -10px;
+}
+
+#score {
+    font-size: 5.2rem;
+    margin-top: -40px;
+    width: 100%;
+}
+
+.content {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100vh;
+}
 
 .grid {
+    position: relative;
     height: 560px;
     width: 560px;
     display: flex;
     flex-wrap: wrap;
+    background: rgba(118, 80, 165, .7);
+    border-radius: 3%;
+}
+
+.grid:before {
+    position: absolute;
+    content: "";
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 10px solid #2c74bc;
+    box-shadow: 0 1px 2px #000;
+    border-radius: 3%;
 }
 
 .grid div {
     height: 70px;
     width: 70px;
+    z-index: 2;
+}
+
+.score-board {
+    background: repeating-linear-gradient(
+        -45deg,
+        #fbc1c0,
+        #fbc1c0 10px,
+        #e5579f 10px,
+        #e5579f 20px
+    );
+    box-shadow: 0 1px 4px #000;
+    border-radius: 3%;
+    width: 240px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner-score-board {
+    background: #fbc1c0;
+    border-radius: 3%;
+    box-shadow: 0 1px 3px #FFF;
+    width: 90%;
+    height: 90%;
+    font-family: 'Pacifico', cursive;
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }
