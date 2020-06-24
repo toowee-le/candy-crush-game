@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
+    const scoreBoard = document.getElementById('score');
+    const movesBoard = document.getElementById('moves');    
     const width = 8;
     const squares = [];
     let score = 0;
-    const scoreBoard = document.getElementById('score');
+    let movesLeft = 20;
 
     const candyColors = [
         'url(assets/img/blue.png)',
@@ -86,6 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if any combo matches
             if (scoredRowOfThree || scoredColumnOfThree || scoredRowOfFour || scoredColumnOfFour || scoredRowOfFive || scoredColumnOfFive) {
                 candyIdBeingReplaced = null;
+                if (movesLeft <= 0) {
+                    grid.style.pointerEvents = 'none';
+                }
             // If no combo matches
             } else if (!scoredRowOfThree && !scoredColumnOfThree && !scoredRowOfFour && !scoredColumnOfFour && !scoredRowOfFive && !scoredColumnOfFive) {
                 squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged;
@@ -123,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (rowOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 3;
                 scoreBoard.innerHTML = score;
+                movesBoard.innerHTML = movesLeft--;
                 rowOfThree.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
@@ -141,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (columnOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 3;
                 scoreBoard.innerHTML = score;
+                movesBoard.innerHTML = movesLeft--;
                 columnOfThree.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
@@ -161,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (rowOfFour.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 4;
                 scoreBoard.innerHTML = score;
+                movesBoard.innerHTML = movesLeft--;
                 rowOfFour.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
@@ -179,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (columnOfFour.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 4;
                 scoreBoard.innerHTML = score;
+                movesBoard.innerHTML = movesLeft--;
                 columnOfFour.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
@@ -199,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (rowOfFive.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 5;
                 scoreBoard.innerHTML = score;
+                movesBoard.innerHTML = movesLeft--;
                 rowOfFive.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
@@ -217,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (columnOfFive.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 5;
                 scoreBoard.innerHTML = score;
+                movesBoard.innerHTML = moves--;
                 columnOfFive.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
