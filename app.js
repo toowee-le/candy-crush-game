@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
-    const scoreBoard = document.getElementById('score');
     const width = 8;
     const squares = [];
     let score = 0;
+    const scoreBoard = document.getElementById('score');
 
     const candyColors = [
         'url(assets/img/blue.png)',
@@ -14,25 +14,26 @@ document.addEventListener('DOMContentLoaded', () => {
         'url(assets/img/yellow.png)',
     ];
 
-    // Create board
+    // Create 8x8 board and add 64 squares
     function createBoard() {
         for (let i = 0; i < width*width; i++) {
             const square = document.createElement('div');
             square.setAttribute('draggable', true);
             square.setAttribute('id', i);
-            let randomColor =  Math.floor(Math.random() * candyColors.length);
-            square.style.backgroundImage = candyColors[randomColor];
+            let randomCandy =  Math.floor(Math.random() * candyColors.length);
+            square.style.backgroundImage = candyColors[randomCandy];
             grid.appendChild(square);
             squares.push(square);
         };
     };
+    
     createBoard();
 
-    // Drag the candies
-    let colorBeingDragged;
-    let colorBeingReplaced;
-    let squareIdBeingDragged;
-    let squareIdBeingReplaced;
+    // Add drag features to the candies
+    let candyBeingDragged;
+    let candyBeingReplaced;
+    let candyIdBeingDragged;
+    let candyIdBeingReplaced;
 
     squares.forEach(square => square.addEventListener('dragstart', dragStart));
     squares.forEach(square => square.addEventListener('dragend', dragEnd));
@@ -42,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     squares.forEach(square => square.addEventListener('drop', dragDrop));
 
     function dragStart() {
-        colorBeingDragged = this.style.backgroundImage;
-        squareIdBeingDragged = parseInt(this.id);
+        candyBeingDragged = this.style.backgroundImage;
+        candyIdBeingDragged = parseInt(this.id);
     };
 
     function dragOver(e) {
@@ -55,49 +56,55 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function dragLeave() {
-        this.style.backgroundImag = '';
+        this.style.backgroundImage = candyBeingDragged;
     };
 
     function dragDrop() {
-        colorBeingReplaced = this.style.backgroundImage;
-        squareIdBeingReplaced = parseInt(this.id);
-        this.style.backgroundImage = colorBeingDragged;
-        squares[squareIdBeingDragged].style.backgroundImage = colorBeingReplaced;
+        candyBeingReplaced = this.style.backgroundImage;
+        candyIdBeingReplaced = parseInt(this.id);
+        squares[candyIdBeingDragged].style.backgroundImage = candyBeingReplaced;
+        squares[candyIdBeingReplaced].style.backgroundImage = candyBeingDragged;
     };
 
     function dragEnd() {
-        console.log(this.id, 'dragend');
-        // An array of valid moves
         let validMoves = [
-            squareIdBeingDragged -1,
-            squareIdBeingDragged -width,
-            squareIdBeingDragged +1, 
-            squareIdBeingDragged +width
-        ]
+            candyIdBeingDragged -1,
+            candyIdBeingDragged -width,
+            candyIdBeingDragged +1, 
+            candyIdBeingDragged +width
+        ];
+        let validMove = validMoves.includes(candyIdBeingReplaced);
 
-        let validMove = validMoves.includes(squareIdBeingReplaced);
-
-        if (squareIdBeingReplaced && validMove) {
-            squareIdBeingReplaced = null;
-        } else if (squareIdBeingReplaced && !validMove) {
-            squares[squareIdBeingReplaced].style.backgroundImage = colorBeingReplaced;
-            squares[squareIdBeingDragged].style.backgroundImage = colorBeingDragged;
-        } else squares[squareIdBeingDragged].style.backgroundImage = colorBeingDragged;
+        // If a valid move
+        if (candyIdBeingReplaced && validMove) {
+            let scoredRowOfThree = checkRowForThree();
+            let scoredColumnOfThree = checkColumnForThree();
+            let scoredRowOfFour = checkRowForFour();
+            let scoredColumnOfFour = checkColumnForFour();
+            // Check if any combo matches
+            if (scoredRowOfThree || scoredColumnOfThree || scoredRowOfFour || scoredColumnOfFour) {
+                candyIdBeingReplaced = null;
+            // If no combo matches
+            } else if (!scoredRowOfThree && !scoredColumnOfThree && !scoredRowOfFour && !scoredColumnOfFour) {
+                squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged;
+                squares[candyIdBeingReplaced].style.backgroundImage = candyBeingReplaced;
+            };
+        // If move is not valid, swap the candies back
+        } else if (candyIdBeingReplaced && !validMove) {
+            squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged;
+            squares[candyIdBeingReplaced].style.backgroundImage = candyBeingReplaced;
+        } else {
+            squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged
+        };
     };
 
     // Drop candies to the bottom
-    function moveDown() {
+    function dropCandies() {
         // Loop through the first 7 rows
         for (let i = 0; i < 55; i++) {
-            if (squares[i + width].style.backgroundImage === '') {
+            if (squares[i + width].style.backgroundImage == '') {
                 squares[i + width].style.backgroundImage = squares[i].style.backgroundImage;
                 squares[i].style.backgroundImage = '';
-                const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
-                const isFirstRow = firstRow.includes(i);
-                if (isFirstRow && (squares[i].style.backgroundImage === '')) {
-                    let randomCandy = Math.floor(Math.random() * candyColors.length);
-                    squares[i].style.backgroundImage = candyColors[randomCandy];
-                }
             }
         }
     }
@@ -107,23 +114,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkRowForThree() {
         for (let i = 0; i < 61; i++) {
             let rowOfThree = [i, i+1, i+2];
-            let decidedColor = squares[i].style.backgroundImage;
+            let firstCandy = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
-
-            // Declare not valid moves
             const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55];
             if (notValid.includes(i)) continue;
-
-            if (rowOfThree.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+            if (rowOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
                 score += 3;
                 scoreBoard.innerHTML = score;
                 rowOfThree.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
+                return true;
             };
         };
+        return false;
     };
-    checkRowForThree();
 
     // Check for row of four
     function checkRowForFour() {
@@ -131,21 +136,19 @@ document.addEventListener('DOMContentLoaded', () => {
             let rowOfFour = [i, i+1, i+2, i+3];
             let decidedColor = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
-
-            // Declare not valid moves
             const notValid = [5, 6, 7, 13, 14, 15, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55];
             if (notValid.includes(i)) continue;
-
             if (rowOfFour.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
                 score += 4;
                 scoreBoard.innerHTML = score;
                 rowOfFour.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
+                return true;
             };
         };
+        return false;
     };
-    checkRowForFour();
 
     // Check for column of three
     function checkColumnForThree() {
@@ -153,15 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
             let columnOfThree = [i, i+width, i+width*2];
             let decidedColor = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
-
             if (columnOfThree.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
                 score += 3;
                 scoreBoard.innerHTML = score;
                 columnOfThree.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
+                return true;
             };
         };
+        return false;
     };
 
     // Check for column of four
@@ -170,19 +174,26 @@ document.addEventListener('DOMContentLoaded', () => {
             let columnOfFour = [i, i+width, i+width*2, i+width*3];
             let decidedColor = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
-
             if (columnOfFour.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
                 score += 4;
                 scoreBoard.innerHTML = score;
                 columnOfFour.forEach(index => {
                     squares[index].style.backgroundImage = '';
                 });
+                return true;
             };
         };
+        return false;
     };
 
     window.setInterval(() => {
-        moveDown()
+        for (let i = 0; i < 8; i++) {
+            if (squares[i].style.backgroundImage === '') {
+                let randomCandy = Math.floor(Math.random() * candyColors.length);
+                squares[i].style.backgroundImage = candyColors[randomCandy];
+            }
+        }
+        dropCandies();
         checkRowForFour();
         checkColumnForFour();
         checkRowForThree();
