@@ -42,6 +42,34 @@ document.addEventListener('DOMContentLoaded', () => {
     candyTwoAudio.src = 'assets/audio/candy_2.wav';
     const candyThreeAudio = new Audio();
 
+    // Mute audio
+    function muteAudio() {
+        resetAudio.muted = true;
+        gameOverAudio.muted = true;
+        starsCompletedAudio.muted = true;
+        invalidMoveAudio.muted = true;
+        sugarCrushAudio.muted = true;
+        deliciousAudio.muted = true;
+        divineAudio.muted = true;
+        tastyAudio.muted = true;
+        candyOneAudio.muted = true;
+        candyTwoAudio.muted = true;
+    };
+
+    // Play audio
+    function playAudio() {
+        resetAudio.muted = false;
+        gameOverAudio.muted = false;
+        starsCompletedAudio.muted = false;
+        invalidMoveAudio.muted = false;
+        sugarCrushAudio.muted = false;
+        deliciousAudio.muted = false;
+        divineAudio.muted = false;
+        tastyAudio.muted = false;
+        candyOneAudio.muted = false;
+        candyTwoAudio.muted = false;
+    };
+    
     // Create 8x8 board and add 64 squares
     function createBoard() {
         for (let i = 0; i < width*width; i++) {
@@ -293,7 +321,11 @@ document.addEventListener('DOMContentLoaded', () => {
         oneStar.style.color = '';
         twoStar.style.color = '';
         threeStar.style.color = '';
-    })
+    });
+
+    document.querySelector('.mute').addEventListener('click', muteAudio);
+    document.querySelector('.play').addEventListener('click', playAudio);
+
 
     window.setInterval(() => {
         for (let i = 0; i < 8; i++) {
