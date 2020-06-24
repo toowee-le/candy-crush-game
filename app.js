@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
     const scoreBoard = document.getElementById('score');
-    const movesBoard = document.getElementById('moves');    
+    const movesBoard = document.getElementById('moves');
+    const oneStar = document.querySelector('.one-star');
+    const twoStar = document.querySelector('.two-star');
+    const threeStar = document.querySelector('.three-star');
     const width = 8;
     const squares = [];
     let score = 0;
@@ -88,9 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if any combo matches
             if (scoredRowOfThree || scoredColumnOfThree || scoredRowOfFour || scoredColumnOfFour || scoredRowOfFive || scoredColumnOfFive) {
                 candyIdBeingReplaced = null;
+                // Update scoreboard
+                scoreBoard.innerHTML = score;
+                if (score > 0 && score <= 30) {
+                    oneStar.style.color = '#fefb38';
+                } else if (score > 30 && score <= 60){
+                    twoStar.style.color = '#fefb38';
+                } else {
+                    threeStar.style.color = '#fefb38';
+                };
+                // Update moves left
                 if (movesLeft <= 0) {
                     grid.style.pointerEvents = 'none';
-                }
+                };
             // If no combo matches
             } else if (!scoredRowOfThree && !scoredColumnOfThree && !scoredRowOfFour && !scoredColumnOfFour && !scoredRowOfFive && !scoredColumnOfFive) {
                 squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged;
