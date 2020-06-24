@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 scoreBoard.innerHTML = score;
                 if (score > 0 && score <= 30) {
                     oneStar.style.color = '#fefb38';
-                } else if (score > 30 && score <= 60){
+                } else if (score > 30 && score <= 70){
                     twoStar.style.color = '#fefb38';
                 } else {
                     threeStar.style.color = '#fefb38';
