@@ -19,6 +19,29 @@ document.addEventListener('DOMContentLoaded', () => {
         'url(assets/img/yellow.png)',
     ];
 
+    // Audio
+    const resetAudio = new Audio();
+    resetAudio.src = 'assets/audio/reset.wav';
+    const gameOverAudio = new Audio();
+    gameOverAudio.src = 'assets/audio/game_over.wav';
+    const starsCompletedAudio = new Audio();
+    starsCompletedAudio.src = 'assets/audio/stars_completed.wav';
+    const invalidMoveAudio = new Audio();
+    invalidMoveAudio.src = 'assets/audio/negative_switch.wav';
+    const sugarCrushAudio = new Audio();
+    sugarCrushAudio.src = 'assets/audio/sugar_crush.wav';
+    const deliciousAudio = new Audio();
+    deliciousAudio.src = 'assets/audio/delicious.wav';
+    const divineAudio = new Audio();
+    divineAudio.src = 'assets/audio/divine.wav';
+    const tastyAudio = new Audio();
+    tastyAudio.src = 'assets/audio/tasty.wav';
+    const candyOneAudio = new Audio();
+    candyOneAudio.src = 'assets/audio/candy_1.wav';
+    const candyTwoAudio = new Audio();
+    candyTwoAudio.src = 'assets/audio/candy_2.wav';
+    const candyThreeAudio = new Audio();
+
     // Create 8x8 board and add 64 squares
     function createBoard() {
         for (let i = 0; i < width*width; i++) {
@@ -91,28 +114,32 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if any combo matches
             if (scoredRowOfThree || scoredColumnOfThree || scoredRowOfFour || scoredColumnOfFour || scoredRowOfFive || scoredColumnOfFive) {
                 candyIdBeingReplaced = null;
-                // Update scoreboard
                 scoreBoard.innerHTML = score;
+                candyOneAudio.play();
                 if (score > 0 && score <= 30) {
                     oneStar.style.color = '#fefb38';
                 } else if (score > 30 && score <= 70){
                     twoStar.style.color = '#fefb38';
                 } else {
                     threeStar.style.color = '#fefb38';
+                    starsCompletedAudio.play();
                 };
                 // Update moves left
                 if (movesLeft <= 0) {
                     grid.style.pointerEvents = 'none';
+                    gameOverAudio.play();
                 };
             // If no combo matches
             } else if (!scoredRowOfThree && !scoredColumnOfThree && !scoredRowOfFour && !scoredColumnOfFour && !scoredRowOfFive && !scoredColumnOfFive) {
                 squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged;
                 squares[candyIdBeingReplaced].style.backgroundImage = candyBeingReplaced;
+                invalidMoveAudio.play();
             };
         // If move is not valid, swap the candies back
         } else if (candyIdBeingReplaced && !validMove) {
             squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged;
             squares[candyIdBeingReplaced].style.backgroundImage = candyBeingReplaced;
+            invalidMoveAudio.play();
         } else {
             squares[candyIdBeingDragged].style.backgroundImage = candyBeingDragged
         };
@@ -139,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55];
             if (notValid.includes(i)) continue;
             if (rowOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
+                candyTwoAudio.play();
                 score += 3;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -158,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let firstCandy = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
             if (columnOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
+                candyThreeAudio.play();
                 score += 3;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -179,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const notValid = [5, 6, 7, 13, 14, 15, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55];
             if (notValid.includes(i)) continue;
             if (rowOfFour.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
+                sugarCrushAudio.play();
                 score += 4;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -198,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let firstCandy = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
             if (columnOfFour.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
+                sugarCrushAudio.play();
                 score += 4;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -219,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const notValid = [4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31, 36, 37, 38, 39, 44, 45, 46, 47, 52, 53, 54, 55];
             if (notValid.includes(i)) continue;
             if (rowOfFive.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
+                divineAudio.play();
                 score += 5;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -238,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let firstCandy = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
             if (columnOfFive.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
+                tastyAudio.play();
                 score += 5;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = moves--;
@@ -252,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset game
     document.querySelector('.reset-btn').addEventListener('click', () => {
-        console.log('clicked');
+        resetAudio.play();
         score = 0;
         scoreBoard.innerHTML = score;
         movesLeft = 20;
