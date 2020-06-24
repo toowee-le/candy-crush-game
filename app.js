@@ -290,6 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreBoard.innerHTML = score;
         movesLeft = 20;
         movesBoard.innerHTML = movesLeft;
+        oneStar.style.color = '';
+        twoStar.style.color = '';
+        threeStar.style.color = '';
     })
 
     window.setInterval(() => {
