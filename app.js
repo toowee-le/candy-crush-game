@@ -250,6 +250,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     };
 
+    // Reset game
+    document.querySelector('.reset-btn').addEventListener('click', () => {
+        console.log('clicked');
+        score = 0;
+        scoreBoard.innerHTML = score;
+        movesLeft = 20;
+        movesBoard.innerHTML = movesLeft;
+    })
+
     window.setInterval(() => {
         for (let i = 0; i < 8; i++) {
             if (squares[i].style.backgroundImage === '') {
