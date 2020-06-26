@@ -98,6 +98,8 @@ Layout
     grid-gap: .4em;
 }
 
+
+
 .moves-card {
     grid-column: 1 / 3;
     height: 100%;
