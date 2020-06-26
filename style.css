@@ -202,12 +202,18 @@ Layout
 @media (max-width: 1100px) {
     .content {
         flex-direction: column;
-        margin-top: 50px;
+        margin-top: 10%;
         height: 100%;
     }
 
     .grid {
         margin-bottom: 2em;
+    }
+
+    .reset-btn {
+        position: absolute;
+        top: 790px;
+        padding: 0 .8em;
     }
 
     .score-board-grid {
@@ -228,7 +234,6 @@ Layout
         width: 5em;
     }
 
-    .reset-btn,
     .mute,
     .play {
         display: none;
