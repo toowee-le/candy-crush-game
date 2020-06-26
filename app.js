@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     resetAudio.src = 'assets/audio/reset.wav';
     const gameOverAudio = new Audio();
     gameOverAudio.src = 'assets/audio/game_over.wav';
-    const starsCompletedAudio = new Audio();
-    starsCompletedAudio.src = 'assets/audio/stars_completed.wav';
     const invalidMoveAudio = new Audio();
     invalidMoveAudio.src = 'assets/audio/negative_switch.wav';
     const sugarCrushAudio = new Audio();
@@ -38,36 +36,30 @@ document.addEventListener('DOMContentLoaded', () => {
     tastyAudio.src = 'assets/audio/tasty.wav';
     const candyOneAudio = new Audio();
     candyOneAudio.src = 'assets/audio/candy_1.wav';
-    const candyTwoAudio = new Audio();
-    candyTwoAudio.src = 'assets/audio/candy_2.wav';
-    const candyThreeAudio = new Audio();
+
 
     // Mute audio
     function muteAudio() {
         resetAudio.muted = true;
         gameOverAudio.muted = true;
-        starsCompletedAudio.muted = true;
         invalidMoveAudio.muted = true;
         sugarCrushAudio.muted = true;
         deliciousAudio.muted = true;
         divineAudio.muted = true;
         tastyAudio.muted = true;
         candyOneAudio.muted = true;
-        candyTwoAudio.muted = true;
     };
 
     // Play audio
     function playAudio() {
         resetAudio.muted = false;
         gameOverAudio.muted = false;
-        starsCompletedAudio.muted = false;
         invalidMoveAudio.muted = false;
         sugarCrushAudio.muted = false;
         deliciousAudio.muted = false;
         divineAudio.muted = false;
         tastyAudio.muted = false;
         candyOneAudio.muted = false;
-        candyTwoAudio.muted = false;
     };
     
     // Create 8x8 board and add 64 squares
@@ -150,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     twoStar.style.color = '#fefb38';
                 } else {
                     threeStar.style.color = '#fefb38';
-                    starsCompletedAudio.play();
                 };
                 // Update moves left
                 if (movesLeft <= 0) {
@@ -194,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55];
             if (notValid.includes(i)) continue;
             if (rowOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
-                candyTwoAudio.play();
                 score += 3;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -214,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let firstCandy = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
             if (columnOfThree.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
-                candyThreeAudio.play();
                 score += 3;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -278,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const notValid = [4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31, 36, 37, 38, 39, 44, 45, 46, 47, 52, 53, 54, 55];
             if (notValid.includes(i)) continue;
             if (rowOfFive.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
-                divineAudio.play();
                 score += 5;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = movesLeft--;
@@ -298,7 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let firstCandy = squares[i].style.backgroundImage;
             const isBlank = squares[i].style.backgroundImage === '';
             if (columnOfFive.every(index => squares[index].style.backgroundImage === firstCandy && !isBlank)) {
-                tastyAudio.play();
                 score += 5;
                 scoreBoard.innerHTML = score;
                 movesBoard.innerHTML = moves--;
@@ -314,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset game
     document.querySelector('.reset-btn').addEventListener('click', () => {
         resetAudio.play();
+        grid.style.pointerEvents = 'auto';
         score = 0;
         scoreBoard.innerHTML = score;
         movesLeft = 20;
