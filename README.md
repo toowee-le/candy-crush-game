@@ -1,6 +1,6 @@
 # Candy Crush
 
-A vanilla JavaScript game inspired by Candy Crush. The project was built to practise JavaScript.
+A vanilla JavaScript game inspired by Candy Crush. The project was built to practise JavaScript.</br>
 Techologies used: HTML, CSS & JavaScript
 
 ## Demo
