@@ -1,4 +1,4 @@
-# Candy Crush
+# Candy Crush :candy:
 
 A vanilla JavaScript game inspired by Candy Crush. The project was built to practise JavaScript.</br>
 Techologies used: HTML, CSS & JavaScript
